@@ -1,0 +1,106 @@
+<%
+from bottle import request
+import requests
+import json
+
+query = request.forms.get("query")
+url = "https://genius.p.rapidapi.com/search"
+search = []
+querystring = {"q": query}
+query = query.replace(" ","-")
+query = query[0:15]
+
+
+headers = {
+    'x-rapidapi-host': "genius.p.rapidapi.com",
+    'x-rapidapi-key': "8d238ba5d1msh125dc7faabaa368p1b7573jsnd0fd058eb4d0"
+    }
+
+response = requests.request("GET", url, headers=headers, params=querystring)
+data = json.loads(response.text)
+
+for i in range(10):
+    search.append(data["response"]["hits"][i]["result"]["full_title"])
+end
+%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='stylesheet'>
+        <title>
+            Song Result
+        </title>
+        <style>
+            body{
+                background: linear-gradient(to left top, #b598eb,#2600ff);
+                background-attachment: fixed;
+                font-family: 'Playfair Display';
+                }
+            form{
+                margin : auto;
+                text-align : center;
+                display : grid;
+                width : 700px;
+                font-size : 32px;
+                background-color: #73b6f0;
+                border : 2px double black;
+            }
+            button{
+                grid-column: 1/2
+            }
+            h1{
+                    font-size: 40px;
+            }
+        </style>
+    </head>
+
+    <body>
+          <h1 style = "text-align:center" name = "title">Song Results</h1>
+          <form action = "/song-info" method = "post">
+            <input hidden type = "text" style = "text-align:center" name = "search" autocomplete="off" value = {{query}}>
+            <label for = "search">{{query}}</label>
+            <div style = "text-align:left">
+                <input type="radio" id="choice0"
+                name="songChoice" value = "0">
+                <label for="choice1">{{search[0]}}</label>
+                <br>
+                <input type="radio" id="choice1"
+                name="songChoice" value = "1">
+                <label for="choice2">{{search[1]}}</label>
+                <br>
+                <input type="radio" id="choice2"
+                name="songChoice" value = "2">
+                <label for="choice2">{{search[2]}}</label>
+                <br>
+                <input type="radio" id="choice3"
+                name="songChoice" value = "3">
+                <label for="choice3">{{search[3]}}</label>
+                <br>
+                <input type="radio" id="choice4"
+                name="songChoice" value = "4">
+                <label for="choice4">{{search[4]}}</label>
+                <br>
+                <input type="radio" id="choice5"
+                name="songChoice" value = "5">
+                <label for="choice5">{{search[5]}}</label>
+                <br>
+                <input type="radio" id="choice6"
+                name="songChoice" value = "6">
+                <label for="choice6">{{search[6]}}</label>
+                <br>
+                <input type="radio" id="choice7"
+                name="songChoice" value = "7">
+                <label for="choice7">{{search[7]}}</label>
+                <br>
+                <input type="radio" id="choice8"
+                name="songChoice" value = "8">
+                <label for="choice8">{{search[8]}}</label>
+                <br>
+                <input type="radio" id="choice9"
+                name="songChoice" value = "9">
+                <label for="choice9">{{search[9]}}</label>
+            </div>
+            <button type="submit" name="submit">Submit</button>
+          </form>
+    </body>
+</html>
