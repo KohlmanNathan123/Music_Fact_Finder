@@ -1,0 +1,126 @@
+<%
+from bottle import request
+import requests
+import json
+search = []
+
+searchU = request.forms.get("search")
+choice = request.forms.get("songChoice")
+choice = int(choice)
+url = "https://genius.p.rapidapi.com/search"
+querystring = {"q": searchU}
+
+headers = {
+    'x-rapidapi-host': "genius.p.rapidapi.com",
+    'x-rapidapi-key': "8d238ba5d1msh125dc7faabaa368p1b7573jsnd0fd058eb4d0"
+    }
+
+response = requests.request("GET", url, headers=headers, params=querystring)
+data = json.loads(response.text)
+
+for i in range(10):
+    search.append(data["response"]["hits"][i]["result"]["full_title"])
+try:
+    name = data["response"]["hits"][choice]["result"]["title"]
+except:
+    name = "N/A"
+    end
+try:
+    artist = data["response"]["hits"][choice]["result"]["artist_names"]
+except:
+    artist = "N/A"
+    end
+try:
+    lyricsPath = data["response"]["hits"][choice]["result"]["path"]
+except:
+    lyricsPath = "N/A"
+    end
+try:
+    imgLink = data["response"]["hits"][choice]["result"]["song_art_image_url"]
+except:
+    imgLink = "https://i.pinimg.com/originals/69/96/5c/69965c2849ec9b7148a5547ce6714735.jpg"
+    end
+try:
+    artistPath = data["response"]["hits"][choice]["result"]["primary_artist"]["api_path"]
+except:
+    artistPath = "N/A"
+    end
+try:
+    pageViews = data["response"]["hits"][choice]["result"]["stats"]["pageviews"]
+except:
+    pageViews = "N/A"
+    end
+artistLink = "https://genius.p.rapidapi.com" + artistPath + "/songs"
+lyricsLink = "https://genius.com" + lyricsPath
+
+end
+%>
+<!DOCTYPE html>
+    <html>
+        <head>
+            <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='stylesheet'>
+            <title>Song Info</title>
+            <style>
+                h1{
+                    font-size: 40px;
+                }
+                body{
+                    background: linear-gradient(to left top, #b598eb,#2600ff);
+                    background-attachment: fixed;
+                    font-family: 'Playfair Display';
+                    text-align:center
+                }
+                form{
+                    margin: auto;
+                    text-align:center;
+                    display:grid;
+                }
+                button{
+                    grid-column: 1/3
+                    height: 5px;
+                    width: 200px;
+                    text-align: center;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+                img{
+                    display: block;
+                    margin-left: auto;
+                    margin-right: auto;
+                    width: 50%;
+                }
+                p1{
+                    font-size:20px;
+                    background-color:#73b6f0;
+                    width: 400px; margin-left: auto;
+                    margin-right: auto
+                }
+                a{
+                    font-size:20px;
+                    background-color:#73b6f0;
+                    width: 400px; margin-left: auto;
+                    margin-right: auto
+                }
+            </style>
+        </head>
+        <body>
+            <h1>
+                Song Information
+            </h1>
+            <input hidden type = "text" style = "text-align:center" name = "link" autocomplete="off" value = {{artistLink}}>
+            <form action = "/music" method = "route">
+                <p1>
+                    Song Name: {{name}}
+                    <br>
+                    Song Artist: {{artist}}
+                    <br>
+                    Song Lyrics Path: https://genius.com{{lyricsPath}}
+                    <br>
+                    Genius page has been viewed {{pageViews}} times
+                </p1>
+                <a href = "{{lyricsLink}}" target="_blank">Genius Lyrics Page</a>
+                <img src = "{{imgLink}}">
+                <button type="submit" name="goHome" style = "padding: 16px 32px" >Return to Home Page</button>
+            </form>
+        </body>
+    </html>
