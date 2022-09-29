@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <link href='https://fonts.googleapis.com/css?family=Playfair Display' rel='stylesheet'>
+            <title>Music Fact Finder</title>
+            <style>
+                body{
+                    background: linear-gradient(to left top, #b598eb,#4d2eff);
+                    background-attachment: fixed;
+                    font-family: 'Playfair Display';
+                    text-align: center;
+                }
+                form{
+                    margin : auto;
+                    text-align : center;
+                    display : grid;
+                    width : 700px;
+                    font-size: 25px
+                }
+                button{
+                    grid-column: 1/3
+                }
+                div{
+                    grid-column: 1/3
+                }
+                h1{
+                    font-size: 40px;
+                }
+                p1{
+                    font-weight: bold;
+                    font-size: 20px;
+                }
+            </style>
+        </head>
+        <body>
+                <h1 style="text-align:center">
+                    Music Fact Finder
+                </h1>
+                <p1>Search for any song and get relevant info about it!</p1>
+                <br>
+                <form action = "/song-page" method = "post">
+                    <label style = "font-weight: bold">Search for Songs and Artists</label>
+                    <input type = "text" name = "query" value = "Search" autocomplete="off"></input>
+                    <button type = "submit" name = "submit">Submit</button>
+                </form>
+        </body>
+    </html>
